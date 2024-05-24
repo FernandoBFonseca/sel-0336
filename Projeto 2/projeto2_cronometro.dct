@@ -226,6 +226,9 @@ cmip
 cmip_bit
 comfrem
 compare_double
+configinterrupt
+configmcu
+configtimer
 crc16ee
 crc16ee_bit
 crc16ef
@@ -434,6 +437,7 @@ fast
 ferr
 ferr_bit
 fixsign32
+flag_isstarted
 flts
 flts_bit
 free
@@ -571,6 +575,7 @@ intedg1
 intedg1_bit
 intedg2
 intedg2_bit
+interrupcao_high
 intsrc
 intsrc_bit
 iofs
@@ -656,6 +661,7 @@ late1
 late1_bit
 late2
 late2_bit
+leddisplay
 longint2double
 longjmp
 longword2double
@@ -686,6 +692,7 @@ lvv2
 lvv2_bit
 lvv3
 lvv3_bit
+main
 mul_16x16_s
 mul_16x16_u
 mul_32x32_fp
@@ -985,6 +992,7 @@ re3_bit
 read_write
 read_write_bit
 res032
+resettimer
 resume_
 resume__bit
 ri
@@ -1190,6 +1198,7 @@ tblptrh
 tblptrl
 tblptru
 tmr0h
+tmr0h_save
 tmr0ie
 tmr0ie_bit
 tmr0if
@@ -1197,6 +1206,7 @@ tmr0if_bit
 tmr0ip
 tmr0ip_bit
 tmr0l
+tmr0l_save
 tmr0on
 tmr0on_bit
 tmr1cs
@@ -1349,6 +1359,7 @@ txsta
 ua
 ua_bit
 uaddr
+uccontador
 ucfg
 ucon
 ueie

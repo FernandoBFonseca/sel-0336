@@ -1,0 +1,9 @@
+main
+	__CC2DW
+	ConfigMCU
+	ConfigTIMER
+		resetTimer
+	ConfigInterrupt
+INTERRUPCAO_HIGH
+	LedDisplay
+	resetTimer
