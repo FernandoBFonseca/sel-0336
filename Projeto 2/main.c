@@ -1,5 +1,3 @@
-
-
 signed char ucContador = -1;        // var global  para incremento
 
 void ConfigMCU();
@@ -13,9 +11,11 @@ void resetTimer();
 #define TMR0H_250ms 0xC2  //0.25s = 0.5us*32*(65536 - X) => X = 49911 = OxC2F7
 #define TMR0L_250ms 0xF7
 
+// Variaveis para salvar o timer
 char tmr0h_save = TMR0H_1000ms;
 char tmr0l_save = TMR0L_1000ms;
-unsigned char flag_isStarted = 0;
+
+unsigned char flag_isStarted = 0; //Flag para identificar se algum botão já foi precionado
 
 void INTERRUPCAO_HIGH() iv 0x0008 ics ICS_AUTO {
 // vetor de tratamento da interrupção (endereço fixo 0x0008)
@@ -24,80 +24,66 @@ void INTERRUPCAO_HIGH() iv 0x0008 ics ICS_AUTO {
 // LOW = interrupção de baixa prioridade (endereço 0x0018)
 // ics = serviço de acionamento/tratamento da interrupção
 
-
-// tratamento - acionar LED
-
-  if(INTCON.INT0IF)  // verifica se a INT0 ocorreu
+  if(INTCON.INT0IF) // verifica se a INT0 ocorreu
    {
-     //clock == 1s
+     //timer == 1s
      flag_isStarted = 1;
-     tmr0h_save = TMR0H_1000ms;
+     tmr0h_save = TMR0H_1000ms; //Set timer para 1000ms
      tmr0l_save = TMR0L_1000ms;
-     ucContador = -1; LedDisplay(++ucContador);
-     resetTimer();
+     ucContador = -1; LedDisplay(++ucContador); //Display 0
      
-     INTCON.INT0IF = 0;
+     resetTimer(); //
+     
+     INTCON.INT0IF = 0; //reset interrupção do INT0
    }
 
-
-  if(INTCON3.INT1IF)         // verifica se a INT1 ocorreu
+  if(INTCON3.INT1IF) // verifica se a INT1 ocorreu
    {
-     //clock == 0.25s
+     //timer == 0.25s
      flag_isStarted = 1;
-     tmr0h_save = TMR0H_250ms;
+     tmr0h_save = TMR0H_250ms; //Set timer para 250ms
      tmr0l_save = TMR0L_250ms;
-     ucContador = -1; LedDisplay(++ucContador);
+     ucContador = -1; LedDisplay(++ucContador); //Display 0
+     
      resetTimer();
 
-     INTCON3.INT1IF = 0;
+     INTCON3.INT1IF = 0; //reset interrupção do INT1
    }
    
-   if(INTCON.TMR0IF && flag_isStarted)    //Foi o TIMER0 que gerou a interrupção ?
+   if(INTCON.TMR0IF && flag_isStarted) //verifica se a TMR0IF ocorreu e
     {
-      LedDisplay(++ucContador);
-      if(ucContador>=9) ucContador = -1;
+      LedDisplay(++ucContador); //Display proximo numero
+      if(ucContador>=9) ucContador = -1; //Reset contator se passar de 9
       resetTimer();
-
     }
 
 }       // Fim do atendimento à interrupção
 
 void resetTimer(){
 
-     TMR0H = tmr0h_save;          //Recarregar o TIMER para 200ms
+     TMR0H = tmr0h_save; //Reset TIMER para o preset salvo
      TMR0L = tmr0l_save;
 
-     INTCON.TMR0IF = 0;   //Não esquecer de zerar a Flag, pois é responsável por
-     //acionar a interrupção
+     INTCON.TMR0IF = 0; //reset interrupção do TIMER
 }
 
 void ConfigMCU()
 {
  ADCON1 |= 0X0F;    // pinos do microcontrolador como digitais
 
- TRISD = 0;       //Configurar os pinos de controle dos LEDs
+ TRISD = 0;       //Configurar os pinos de controle do display para outputs
  PORTD = 0;      // inicialmente desligado
  
- // Halitar resistores pull-up internos
  INTCON2.RBPU = 0; //RBPU é barrado, portanto acionado em 0
- //ligar os resistores de pull-up do PORTB
  
 }
 
 void ConfigTIMER()
 {
-//*******************TIMER0 PARA 200ms*********************************
-//CicloMaquina = Fosc/4 -> 8MHz/4 = 2MHz -> Periodo = 1/F -> 1/2MHz = 0.5us
-
-//Time_overflow = CicloMaq. * Prescaler * (Modo_8_16bits - valor Inicial)
-//200.000us    = 0.5us * 32 * (65536 -  X)
-//X = 65536 - 12500 = 53036  -> converter valor para HEX: CF2C
-
-//******************************************************************************
   T0CON = 0B00000100;  //TIMER_OFF, MOD_16BITS, TIMER, PRES_1:32
   resetTimer();
-  INTCON.TMR0IE = 1;
-  T0CON.TMR0ON = 1;   //Liga o TIMER0
+  INTCON.TMR0IE = 1;  //Enable TIMER0
+  T0CON.TMR0ON = 1;   //Ativa contagem TIMER0
 }
 
 void ConfigInterrupt()
@@ -116,11 +102,6 @@ void ConfigInterrupt()
   INTCON2.INTEDG1 = 0 ;   //borda da INT1 descida
   INTCON3.INT1IF = 0;   // zera a flag da INT0 (vai p/ 1 quando a interrupção ocorrer)
   INTCON3.INT1IE = 1;       // habilita interrupção INT1
-  
-
-
-
-  
 }
 
 void LedDisplay(unsigned char value)  // Funcao para iluminar display 7seg
@@ -138,18 +119,16 @@ void LedDisplay(unsigned char value)  // Funcao para iluminar display 7seg
             case 8:{ latd = 0b01111111; break;}   // 8 no display de 7seg.
             case 9:{ latd = 0b01101111; break;}   // 9 no display de 7seg.
             default:{ PORTD =0; break;} // zera todo o PORTD e
-            //reincia o contador
      }
 
 }
 
-
 void main() {
-   ConfigMCU();           //pinos do MCU config. para acionar os LEDS
-   ConfigTIMER();         // tempo config. e TIMER ligado
+   ConfigMCU();       //pinos do MCU config. para acionar o display
+   ConfigTIMER();     //tempo config. e TIMER ligado
    ConfigInterrupt(); //Configuração global das interrupções
 
 
   while(1) {  // Endless loop
- } //while
+   } //while
  } //main
