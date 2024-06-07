@@ -1,0 +1,12 @@
+0	1	mikroCPIC1618.exe -MSF -DBG -pP18F4550 -DL -O11111114 -fo8 -N"C:\Users\edusc\Documents\majors_usp\microprocessadores\projeto_3\Exemplo_11_ADC_LCD\Exemplo_11_ADC_LCD.mcppi" -SP"C:\Program Files (x86)\mikroC PRO for PIC\Defs\" -SP"C:\Program Files (x86)\mikroC PRO for PIC\uses\P18\" -SP"C:\Users\edusc\Documents\majors_usp\microprocessadores\projeto_3\Exemplo_11_ADC_LCD\" -IP"C:\Program Files (x86)\mikroC PRO for PIC\uses\P18\" "Exemplo_11_ADC_LCD.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays.mcl" "__Lib_CString.mcl" "__Lib_Conversions.mcl" "__Lib_ADC_A_D.mcl" "__Lib_LcdConsts.mcl" "__Lib_Lcd.mcl"	 
+hint: 0	1139	Available RAM: 2027 [bytes], Available ROM: 32768 [bytes]	 
+diagnostics: 0	122	Compilation Started	Exemplo_11_ADC_LCD.c
+diagnostics: 117	123	Compiled Successfully	Exemplo_11_ADC_LCD.c
+hint: 47	1164	Variable 'Valor_ADC' has been eliminated by optimizer	Exemplo_11_ADC_LCD.c
+diagnostics: 0	127	All files Compiled in 78 ms	 
+hint: 0	1144	Used RAM (bytes): 30 (1%)  Free RAM (bytes): 1997 (99%)	Used RAM (bytes): 30 (1%)  Free RAM (bytes): 1997 (99%)
+hint: 0	1144	Used ROM (bytes): 1671 (5%)  Free ROM (bytes): 31097 (95%)	Used ROM (bytes): 1671 (5%)  Free ROM (bytes): 31097 (95%)
+diagnostics: 0	125	Project Linked Successfully	Exemplo_11_ADC_LCD.mcppi
+diagnostics: 0	128	Linked in 32 ms	 
+diagnostics: 0	129	Project 'Exemplo_11_ADC_LCD.mcppi' completed: 266 ms	 
+diagnostics: 0	103	Finished successfully: 27 mai 2024, 21:09:53	Exemplo_11_ADC_LCD.mcppi
