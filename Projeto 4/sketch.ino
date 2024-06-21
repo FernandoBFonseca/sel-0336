@@ -1,4 +1,5 @@
 // Biblioteca para controlar o servo
+#include <Arduino.h>
 #include <ESP32Servo.h>
 // Biblioteca para comunicacao I2C
 #include <Wire.h>
@@ -8,7 +9,7 @@
 
 // Pinos dos botoes
 #define START_BUTTON_PIN  14
-#define STOP_BUTTON_PIN   34
+#define STOP_BUTTON_PIN   12
 
 // Pino do servo
 #define SERVO_PIN         4
@@ -55,6 +56,8 @@ void setup() {
 
 void loop() {
   // Printa as informacoes no serial
+
+
   writeInfosSerial();
   // Printa as informacoes no display
   writeInfosDisplay();
@@ -67,17 +70,19 @@ void loop() {
   if(startFlag && digitalRead(STOP_BUTTON_PIN) == HIGH) {
     startFlag = false;
   }
+  
   // Caso o sistema esteja desligado e o botao start seja
   // pressionado, liga o sistema
   else if (!startFlag && digitalRead(START_BUTTON_PIN) == HIGH) {
     startFlag = true;
   }
-
+  
   // Atualiza a posicao do servo
   moveServo();
   
   // Delay de 10ms
   delay(10);
+  
 }
 
 void moveServo() {
